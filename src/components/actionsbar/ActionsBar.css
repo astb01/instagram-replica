@@ -1,0 +1,25 @@
+.actionsbar {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 10px;
+}
+
+.actionsbar___icon {
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.actionsbar___iconComment {
+  height: 50px;
+  width: 50px;
+  margin-top: -10px;
+  cursor: pointer;
+}
+
+.actionsbar___iconMessage {
+  height: 28px;
+  width: 28px;
+  margin-top: 3px;
+  cursor: pointer;
+}

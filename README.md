@@ -1,3 +1,9 @@
+# Instagram Replica
+
+This project is a React application which mimics the Instagram application.
+
+The project uses Firebase for authentication, database storage and hosting.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

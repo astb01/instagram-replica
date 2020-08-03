@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-
-import Post from "./components/post/Post";
-import { db } from "./config/firebase";
-import ImageUpload from "./components/imageupload/ImageUpload";
-import InstagramEmbed from "react-instagram-embed";
-
-import { Button, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import { auth } from "./config/firebase";
+import { Button, Input } from "@material-ui/core";
+import { auth } from "../../config/firebase";
+
+import "./AuthActions.css";
 
 function getModalStyle() {
   const top = 50;
@@ -33,8 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
-  const [posts, setPosts] = useState([]);
+const AuthActions = () => {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
@@ -88,38 +82,8 @@ function App() {
     setOpenSignIn(false);
   };
 
-  useEffect(() => {
-    // listen for changes to documents:
-    db.collection("posts")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        setPosts(
-          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
-        );
-      });
-  }, [posts]); // handle post changes
-
   return (
-    <div className="app">
-      <div className="app__header">
-        <img
-          className="app__headerImage"
-          src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
-          alt="Instagram"
-        />
-        {user ? (
-          <Button onClick={() => auth.signOut()}>Log Out</Button>
-        ) : (
-          <div className="authActions__loginActionsContainer">
-            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-
-            <Button onClick={() => setOpen(true)}>Sign Up</Button>
-          </div>
-        )}
-      </div>
-
-      {/* --- Modal Start --- */}
-
+    <div>
       {/* TODO - Refactor modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
@@ -188,45 +152,17 @@ function App() {
         </div>
       </Modal>
 
-      {/* -- Modal End --- */}
-
-      <div className="app__posts">
-        <div className="app__postsleft">
-          {posts.map(({ post, id }) => (
-            <Post
-              key={id}
-              postId={id}
-              user={user}
-              username={post.username}
-              imageUrl={post.imageUrl}
-              caption={post.caption}
-            />
-          ))}
-        </div>
-
-        <div className="app_postsright">
-          <InstagramEmbed
-            url="https://instagr.am/p/Zw9o4/"
-            maxWidth={320}
-            hideCaption={false}
-            containerTagName="div"
-            protocol=""
-            injectScript
-            onLoading={() => {}}
-            onSuccess={() => {}}
-            onAfterRender={() => {}}
-            onFailure={() => {}}
-          />
-        </div>
-      </div>
-
-      {user?.displayName ? (
-        <ImageUpload username={user.displayName} />
+      {user ? (
+        <Button onClick={() => auth.signOut()}>Log Out</Button>
       ) : (
-        <h3>Sorry you need to log in to upload</h3>
+        <div className="authActions__loginActionsContainer">
+          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
       )}
     </div>
   );
-}
+};
 
-export default App;
+export default AuthActions;
